@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:40:22 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/04 15:07:35 by codespace        ###   ########.fr       */
+/*   Updated: 2025/11/05 11:02:47 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
  #include <pthread.h>
 
 //____________________SRC____________________//
-
+void   *to_do_list(void *philo);
 
  #endif

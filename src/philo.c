@@ -6,11 +6,11 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:08:20 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/04 15:41:48 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/05 11:02:19 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void    *to_do_list(void *philo)
 {

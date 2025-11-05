@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 15:08:20 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/05 14:09:54 by pestell2         ###   ########.fr       */
+/*   Created: 2025/11/05 14:16:43 by pestell2          #+#    #+#             */
+/*   Updated: 2025/11/05 14:35:50 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void    *to_do_list(void *philo)
+long    ft_atol(const char *str)
 {
-    int id = *(int*)philo;
-    printf("hello, i'm philo [%d]\n", id); 
-    pthread_exit(NULL);
-}
+    long    result;
 
-int     main(int argc, char **argv)
-{
-    if(parse_args(argc, argv) != 0)
-        return (1);
-    else
-        printf("Arguments parsed successfully.\n");
-    return (0);
+    result = 0;
+    if (*str == '+')
+        str++;
+    if (*str == '\0')
+        return (0);
+    while (*str >= '0' && *str <= '9')
+    {
+        if (result > (LONG_MAX - (*str - '0')) / 10)
+            return (LONG_MAX);
+        result = result * 10 + (*str - '0');
+        str++;
+    }
+    return (result);
 }

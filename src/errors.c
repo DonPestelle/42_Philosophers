@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 15:08:20 by codespace         #+#    #+#             */
-/*   Updated: 2025/11/05 14:09:54 by pestell2         ###   ########.fr       */
+/*   Created: 2025/11/05 11:52:10 by pestell2          #+#    #+#             */
+/*   Updated: 2025/11/05 14:12:45 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void    *to_do_list(void *philo)
+int print_error(char *msg)
 {
-    int id = *(int*)philo;
-    printf("hello, i'm philo [%d]\n", id); 
-    pthread_exit(NULL);
-}
-
-int     main(int argc, char **argv)
-{
-    if(parse_args(argc, argv) != 0)
-        return (1);
-    else
-        printf("Arguments parsed successfully.\n");
-    return (0);
+    printf("%s", msg);
+    return (1);
 }

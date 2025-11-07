@@ -6,7 +6,7 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:40:22 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/05 14:17:45 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:58:05 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,7 @@
  #include <limits.h>
  #define  ERR_ARGS "Error: Invalid number of arguments.\n"
  #define  ERR_VAL "Error: Arguments must be positive integers.\n"
-
- typedef struct s_philo
- {
-    int             id;
-    pthread_t       thread;
- }               t_philo;
+ typedef struct s_philo t_philo;
  typedef struct s_data
  {
     int            number_of_philosophers;
@@ -32,7 +27,21 @@
     int            time_to_eat;
     int            time_to_sleep;
     int            number_of_meals;
+    int            n;
+    pthread_mutex_t *forks;
+    t_philo        *philos;
+    long           start_time;
+    pthread_mutex_t print_mutex;
  }              t_data;
+ typedef struct s_philo
+ {
+    int             id;
+    pthread_t       thread;
+    int             left;
+    int             right;
+    long            last_meal;
+    t_data         *data;
+ }             t_philo;
 
  //____________________SRC____________________//
 void   *to_do_list(void *philo);

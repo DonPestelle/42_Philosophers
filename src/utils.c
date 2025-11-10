@@ -6,7 +6,7 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 14:16:43 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/05 14:35:50 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/10 16:52:28 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,12 @@ long    ft_atol(const char *str)
         str++;
     }
     return (result);
+}
+
+int ft_strlen(const char *str)
+{
+    int len = 0;
+    while (str[len] != '\0')
+        len++;
+    return len;
 }

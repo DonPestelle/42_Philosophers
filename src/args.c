@@ -6,7 +6,7 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:36:51 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/05 14:37:10 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/10 16:54:05 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,11 @@ void    ft_assign_values(long *val, int has_meals)
 
     data = get_data_instance();
     data->number_of_philosophers = (int)val[0];
-    printf("Number of philosophers: %d\n", data->number_of_philosophers);
     data->time_to_die = (int)val[1];
-    printf("Time to die: %d\n", data->time_to_die);
     data->time_to_eat = (int)val[2];
-    printf("Time to eat: %d\n", data->time_to_eat);
     data->time_to_sleep = (int)val[3];
-    printf("Time to sleep: %d\n", data->time_to_sleep);
     if (has_meals != 0)
         data->number_of_meals = (int)val[4];
     else
         data->number_of_meals = -1;
-    printf("Number of meals: %d\n", data->number_of_meals);
 }

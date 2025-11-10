@@ -6,7 +6,7 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 11:52:10 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/05 14:12:45 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/10 16:52:16 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 int print_error(char *msg)
 {
-    printf("%s", msg);
+    write(2, &msg, ft_strlen(msg));
     return (1);
 }

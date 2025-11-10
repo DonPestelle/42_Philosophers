@@ -6,13 +6,14 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:40:22 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/07 16:58:05 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:14:50 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 #define PHILO_H
 
+ #include <unistd.h>
  #include <stdio.h>
  #include <pthread.h>
  #include <stdlib.h>
@@ -44,15 +45,21 @@
  }             t_philo;
 
  //____________________SRC____________________//
-void   *to_do_list(void *philo);
+void  *philo_routine(void *arg);
 
 //____________________ARGS____________________//
 int    parse_args(int argc, char **argv);
 void   ft_assign_values(long *val, int has_meals);
+t_data *get_data_instance();
 
 //____________________ERRORS____________________//
 int    print_error(char *msg);
 
 //____________________UTILS____________________//
 long   ft_atol(const char *str);
+int    ft_strlen(const char *str);
+
+//_____________________PHILOS____________________//
+int   create_philos(t_data *d);
+void  join_threads(t_data *d);
  #endif

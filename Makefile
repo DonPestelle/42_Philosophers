@@ -1,30 +1,60 @@
-CC = gcc #-fsanitize=thread
-CFLAGS = -Wall -Wextra -Werror -Iinclude -g
-LDFLAGS = -lpthread
+# =======================
+#        VARIABLES
+# =======================
 
-SRC = src/main.c \
-      src/philos.c \
-      src/args.c \
-      src/errors.c \
-      src/utils.c \
-      src/philo_actions.c \
-      src/monitor.c \
-      src/messg.c
+NAME        := philo
+CC          := gcc
 
-OBJ = $(SRC:.c=.o)
+SRC_DIR     := src
+OBJ_DIR     := obj
+INC_DIR     := include
 
-all: philo
+CFLAGS      := -Wall -Wextra -Werror -g -I$(INC_DIR)
+LDFLAGS     := -lpthread
+# SANITIZER := -fsanitize=thread
 
-philo: $(OBJ)
-	$(CC)  -o $@ $^ $(LDFLAGS)
+SRC_FILES   := main.c philos.c args.c errors.c utils.c \
+               philo_actions.c monitor.c messg.c
 
-%.o: %.c Makefile 
-	$(CC) $(CFLAGS) -c $< -o $@
+SRC         := $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+OBJ         := $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
+# =======================
+#        COLORES
+# =======================
+
+GREEN   := \033[0;32m
+YELLOW  := \033[0;33m
+BLUE    := \033[0;34m
+RED     := \033[0;31m
+RESET   := \033[0m
+
+# =======================
+#        REGLAS
+# =======================
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	@echo "$(BLUE)Linking $(NAME)...$(RESET)"
+	@$(CC) $(OBJ) -o $(NAME) $(LDFLAGS) $(SANITIZER)
+	@echo "$(GREEN)✔ Build completed: $(NAME)$(RESET)"
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@echo "$(YELLOW)Compiling $<$(RESET)"
+	@$(CC) $(CFLAGS) $(SANITIZER) -c $< -o $@
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+clean:
+	@echo "$(RED)Removing object files...$(RESET)"
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f philo
-clean:
-	rm -f $(OBJ) philo
+	@echo "$(RED)Removing executable...$(RESET)"
+	@rm -f $(NAME)
+
 re: fclean all
+
 .PHONY: all clean fclean re

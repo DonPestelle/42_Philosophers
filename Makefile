@@ -1,8 +1,16 @@
 CC = gcc #-fsanitize=thread
-CFLAGS = -Wall -Wextra -Werror -Iinclude
+CFLAGS = -Wall -Wextra -Werror -Iinclude -g
 LDFLAGS = -lpthread
 
-SRC = src/main.c src/philos.c src/args.c src/errors.c src/utils.c src/philo_actions.c
+SRC = src/main.c \
+      src/philos.c \
+      src/args.c \
+      src/errors.c \
+      src/utils.c \
+      src/philo_actions.c \
+      src/monitor.c \
+      src/messg.c
+
 OBJ = $(SRC:.c=.o)
 
 all: philo
@@ -19,3 +27,4 @@ fclean: clean
 clean:
 	rm -f $(OBJ) philo
 re: fclean all
+.PHONY: all clean fclean re

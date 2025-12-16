@@ -6,54 +6,71 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 14:32:25 by pestell2          #+#    #+#             */
-/*   Updated: 2025/11/13 18:19:23 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/12/10 14:21:45 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <pthread.h>
+
+static void	take_forks(t_philo *philo)
+{
+	t_data	*data;
+	int		first;
+	int		second;
+	int		tmp;
+
+	data = philo->data;
+	first = philo->left_fork;
+	second = philo->right_fork;
+	if (first > second)
+	{
+		tmp = first;
+		first = second;
+		second = tmp;
+	}
+	pthread_mutex_lock(&data->forks[first]);
+	ft_display_message(FORK, philo);
+	pthread_mutex_lock(&data->forks[second]);
+	ft_display_message(FORK, philo);
+}
 
 static void	philo_eat(t_philo *philo)
 {
 	t_data	*data;
 
 	data = philo->data;
-	//if (philo->id % 2 == 0)
-	//{
-		pthread_mutex_lock(&data->forks[philo->right]);
-		pthread_mutex_lock(&data->forks[philo->left]);
-	//}
-	//else
-	//{
-		//pthread_mutex_lock(&data->forks[philo->left]);
-		//pthread_mutex_lock(&data->forks[philo->right]);
-	//}
-	pthread_mutex_lock(&data->print_mutex);
-	philo->last_meal = current_time_ms();
-	printf("Philo %d is eating 🍝\n", philo->id);
-	pthread_mutex_unlock(&data->print_mutex);
-	usleep(data->time_to_eat * 1000);
-	pthread_mutex_unlock(&data->forks[philo->left]);
-	pthread_mutex_unlock(&data->forks[philo->right]);
+	if (data->number_of_philos == 1)
+	{
+		pthread_mutex_lock(&data->forks[philo->left_fork]);
+		ft_display_message(FORK, philo);
+		ft_sleep(data->time_to_die, data);
+		pthread_mutex_unlock(&data->forks[philo->left_fork]);
+		return ;
+	}
+	take_forks(philo);
+	pthread_mutex_lock(&philo->philo_mutex);
+	philo->is_eating = true;
+	philo->last_meal = ft_get_time();
+	pthread_mutex_unlock(&philo->philo_mutex);
+	ft_display_message(EAT, philo);
+	ft_sleep(data->time_to_eat, data);
+	pthread_mutex_lock(&philo->philo_mutex);
+	philo->is_eating = false;
 	philo->meals_done++;
+	pthread_mutex_unlock(&philo->philo_mutex);
+	pthread_mutex_unlock(&data->forks[philo->left_fork]);
+	pthread_mutex_unlock(&data->forks[philo->right_fork]);
 }
 
 static void	philo_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("Philo %d is sleeping 💤\n", philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
-	usleep(philo->data->time_to_sleep * 1000);
+	ft_display_message(SLEEP, philo);
+	ft_sleep(philo->data->time_to_sleep, philo->data);
 }
 
 static void	philo_think(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("Philo %d is thinking 💭\n", philo->id);
-	pthread_mutex_unlock(&philo->data->print_mutex);
-	usleep(500 * 1000);
+	ft_display_message(THINK, philo);
 }
 
 void	*philo_routine(void *arg)
@@ -63,46 +80,18 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	data = philo->data;
-	while (!data->stop && (data->number_of_meals == -1
-			|| philo->meals_done < data->number_of_meals))
-	{
-		if (data->stop)
-			break;
-		philo_eat(philo);
-		if (data->stop)
-			break;
-		philo_sleep(philo);
-		if (data->stop)
-			break;
-		philo_think(philo);
-	}
-	return (NULL);
-}
-
-void	*monitor(void *arg)
-{
-	t_data	*data;
-	int		i;
-
-	data = (t_data *)arg;
+	if (philo->id % 2 == 0)
+		usleep(1000);
 	while (!data->stop)
 	{
-		i = 0;
-		while (i < data->number_of_philosophers)
-		{
-			pthread_mutex_lock(&data->print_mutex);
-			if ((current_time_ms() - data->philos[i].last_meal)
-				> data->time_to_die)
-			{
-				printf("Philo %d died 💀\n", data->philos[i].id);
-				data->stop = 1;
-				pthread_mutex_unlock(&data->print_mutex);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&data->print_mutex);
-			i++;
-		}
-		//usleep(1000);
+		philo_eat(philo);
+		if (data->stop)
+			break ;
+		if (data->number_of_meals != -1
+			&& philo->meals_done >= data->number_of_meals)
+			break ;
+		philo_sleep(philo);
+		philo_think(philo);
 	}
 	return (NULL);
 }

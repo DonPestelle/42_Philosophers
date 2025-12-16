@@ -6,7 +6,7 @@
 /*   By: pestell2 <pestelle.official@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:40:22 by pestell2          #+#    #+#             */
-/*   Updated: 2025/12/02 12:41:00 by pestell2         ###   ########.fr       */
+/*   Updated: 2025/12/10 14:20:06 by pestell2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,54 +19,84 @@
 # include <pthread.h>
 # include <limits.h>
 # include <sys/time.h>
-
-# define ERR_ARGS "Invalid number of arguments.\n"
-# define ERR_VAL "Arguments must be positive integers.\n"
+# include <stdbool.h>
 
 typedef struct s_philo	t_philo;
 typedef struct s_data	t_data;
 
-typedef struct s_philo
+typedef enum e_error
+{
+	ARGUMENTS_NUMBER,
+	ARGS_NOT_NUMERIC,
+	NEGATIVE_NUMBERS,
+	CREATING_VARIABLES,
+	CREATING_THREADS,
+}	t_error;
+
+typedef enum e_messages
+{
+	FORK,
+	EAT,
+	SLEEP,
+	THINK,
+	FINISH_MEALS,
+	DIE
+}	t_messages;
+
+struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	int				left;
-	int				right;
+	int				left_fork;
+	int				right_fork;
 	long			last_meal;
 	t_data			*data;
+	pthread_mutex_t	philo_mutex;
 	int				meals_done;
-	int 				is_eating;
-}		t_philo;
+	bool			is_eating;
+};
 
-typedef struct	 s_data
+struct s_data
 {
-	int				number_of_philosophers;
+	int				number_of_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_meals;
+	pthread_t		monitor_thread;
 	int				stop;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	*forks;
 	t_philo			*philos;
-}	t_data;
+	long			start_time;
+};
 
-//====================== ARGS ======================//
+/* args.c */
 int		parse_args(int argc, char **argv);
-void	ft_assign_values(long *val, int has_meals);
 t_data	*get_data_instance(void);
 
-//====================== ERRORS ====================//
-int		print_error(char *msg);
+/* errors.c */
+int		print_error(t_error err);
 
-//====================== UTILS =====================//
-long	ft_atol(const char *str);
-long	current_time_ms(void);
+/* philos.c */
+void	init_philos(t_data *data);
+void	cleanup_philos(t_data *data);
 
-//===================== PHILOS =====================//
-int		create_philos(t_data *data);
-void	join_threads(t_data *data);
+/* philo_actions.c */
 void	*philo_routine(void *arg);
+
+/* monitor.c */
 void	*monitor(void *arg);
+
+/* messg.c */
+void	ft_display_message(t_messages msg, t_philo *philo);
+
+/* utils.c */
+long	ft_atol(const char *str);
+int		ft_strlen(const char *str);
+long	ft_get_time(void);
+void	ft_assign_values(long val[], int has_meals);
+void	ft_sleep(long ms, t_data *data);
 
 #endif

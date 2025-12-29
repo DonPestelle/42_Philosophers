@@ -11,7 +11,6 @@ INC_DIR     := include
 
 CFLAGS      := -Wall -Wextra -Werror -g -I$(INC_DIR)
 LDFLAGS     := -lpthread
-# SANITIZER := -fsanitize=thread
 
 SRC_FILES   := main.c philos.c args.c errors.c utils.c \
                philo_actions.c monitor.c messg.c
